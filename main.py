@@ -108,7 +108,7 @@ if uploaded_file is not None:
     total_protein = 0
     total_fat = 0
     total_carbs = 0
-    for dish in get_nutri(save_path):
+    for dish in list(set(get_nutri(save_path))):
         nutri = nutrition_data[dish]
         st.markdown(f"""
             ### 🍛 {dish.upper()}

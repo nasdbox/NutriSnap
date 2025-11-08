@@ -103,26 +103,34 @@ if uploaded_file is not None:
     image.save(save_path)
     st.success("✅ Image uploaded successfully!")
     # print(get_nutri(save_path))
-    st.title("Nutrients in your plate 🍽️")
     total_cal = 0
     total_protein = 0
     total_fat = 0
     total_carbs = 0
-    for dish in list(set(get_nutri(save_path))):
-        nutri = nutrition_data[dish]
-        st.markdown(f"""
-            ### 🍛 {dish.upper()}
-            🔸 **Calories:** {nutri['cal']} kcal  
-            🔸 **Protein:** {nutri['protein']} g  
-            🔸 **Fat:** {nutri['fat']} g  
-            🔸 **Carbs:** {nutri['carbs']} g  
-            """)
-        total_cal += nutri['cal']
-        total_protein += nutri['protein']
-        total_fat += nutri['fat']
-        total_carbs += nutri['carbs']
+    dishes = list(set(get_nutri(save_path)))
+    if dishes:
+        st.header("🥗 Nutrients in your plate")
+        for dish in dishes:
+            nutri = nutrition_data[dish]
+            st.markdown(f"""
+                ### 🍛 {dish.upper()}
+                🔸 **Calories:** {nutri['cal']} kcal  
+                🔸 **Protein:** {nutri['protein']} g  
+                🔸 **Fat:** {nutri['fat']} g  
+                🔸 **Carbs:** {nutri['carbs']} g  
+                """)
+            total_cal += nutri['cal']
+            total_protein += nutri['protein']
+            total_fat += nutri['fat']
+            total_carbs += nutri['carbs']
 
-    feedback_list = get_feedback(total_cal, total_protein, total_fat, total_carbs)
-    st.subheader("🧠 Nutrition Feedback")
-    for fb in feedback_list:
-        st.write("- ", fb)  
+        feedback_list = get_feedback(total_cal, total_protein, total_fat, total_carbs)
+        st.subheader("🧠 Nutrition Feedback")
+        for fb in feedback_list:
+            st.write("- ", fb)
+    else:
+        st.markdown(f"""
+            ### ⚠️ No food detected in the image
+            &nbsp;Try uploading a clearer image with visible food items.
+            """)
+      
